@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Pahana Edu Bookshop</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pahana Edu Bookshop</h1>
+            <div class="user-info">
+                <span id="username"></span>
+                <a href="auth" class="btn">Logout</a>
+            </div>
+        </header>
+        
+        <main>
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="customer.html">Customer Management</a></li>
+                    <li><a href="item.html">Item Management</a></li>
+                    <li><a href="bill.html">Billing System</a></li>
+                    <li><a href="help.html">Help</a></li>
+                </ul>
+            </nav>
+            
+            <section class="content">
+                <h2>Dashboard</h2>
+                
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <h3>Customers</h3>
+                        <p id="customer-count">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>Items</h3>
+                        <p id="item-count">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>Today's Bills</h3>
+                        <p id="bill-count">0</p>
+                    </div>
+                </div>
+                
+                <div class="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <div id="activity-log">
+                        <p>Loading recent activity...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Pahana Edu Bookshop. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadDashboardData();
+        });
+        
+        function loadDashboardData() {
+            // Load customer count
+            fetch('customers')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('customer-count').textContent = data.length;
+                })
+                .catch(error => console.error('Error loading customers:', error));
+            
+            // Load item count
+            fetch('items')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('item-count').textContent = data.length;
+                })
+                .catch(error => console.error('Error loading items:', error));
+            
+            // Load recent activity (simulated)
+            const activityLog = document.getElementById('activity-log');
+            activityLog.innerHTML = `
+                <div class="activity-item">
+                    <span class="activity-time">10:30 AM</span>
+                    <span>New customer registered: ACC001</span>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">09:45 AM</span>
+                    <span>Bill generated for customer ACC002</span>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">Yesterday</span>
+                    <span>New item added: Advanced Java Programming</span>
+                </div>
+            `;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management - Pahana Edu Bookshop</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pahana Edu Bookshop</h1>
+            <div class="user-info">
+                <span id="username"></span>
+                <a href="auth" class="btn">Logout</a>
+            </div>
+        </header>
+        
+        <main>
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="customer.html" class="active">Customer Management</a></li>
+                    <li><a href="item.html">Item Management</a></li>
+                    <li><a href="bill.html">Billing System</a></li>
+                    <li><a href="help.html">Help</a></li>
+                </ul>
+            </nav>
+            
+            <section class="content">
+                <h2>Customer Management</h2>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="showTab('add-customer')">Add Customer</button>
+                    <button class="tab-btn" onclick="showTab('view-customers')">View Customers</button>
+                    <button class="tab-btn" onclick="showTab('edit-customer')">Edit Customer</button>
+                </div>
+                
+                <div id="add-customer" class="tab-content">
+                    <form id="add-customer-form">
+                        <div class="form-group">
+                            <label for="accountNumber">Account Number:</label>
+                            <input type="text" id="accountNumber" name="accountNumber" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <textarea id="address" name="address" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telephone">Telephone:</label>
+                            <input type="tel" id="telephone" name="telephone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="unitsConsumed">Units Consumed:</label>
+                            <input type="number" id="unitsConsumed" name="unitsConsumed" min="0" value="0">
+                        </div>
+                        
+                        <button type="submit" class="btn">Add Customer</button>
+                    </form>
+                </div>
+                
+                <div id="view-customers" class="tab-content" style="display: none;">
+                    <div class="search-container">
+                        <input type="text" id="customer-search" placeholder="Search by account number or name">
+                        <button id="search-btn" class="btn">Search</button>
+                    </div>
+                    
+                    <table id="customer-table">
+                        <thead>
+                            <tr>
+                                <th>Account Number</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Telephone</th>
+                                <th>Units Consumed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5">Loading customer data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="edit-customer" class="tab-content" style="display: none;">
+                    <div class="form-group">
+                        <label for="edit-account-number">Account Number:</label>
+                        <input type="text" id="edit-account-number">
+                        <button id="load-customer-btn" class="btn">Load Customer</button>
+                    </div>
+                    
+                    <form id="edit-customer-form" style="display: none;">
+                        <div class="form-group">
+                            <label for="edit-name">Name:</label>
+                            <input type="text" id="edit-name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit-address">Address:</label>
+                            <textarea id="edit-address" name="address" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit-telephone">Telephone:</label>
+                            <input type="tel" id="edit-telephone" name="telephone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="edit-units-consumed">Units Consumed:</label>
+                            <input type="number" id="edit-units-consumed" name="unitsConsumed" min="0">
+                        </div>
+                        
+                        <button type="submit" class="btn">Update Customer</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Pahana Edu Bookshop. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadCustomerData();
+            
+            // Add customer form submission
+            document.getElementById('add-customer-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                fetch('customers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data)
+                })
+                .then(response => {
+                    if (response.status === 201) {
+                        alert('Customer added successfully!');
+                        this.reset();
+                        loadCustomerData();
+                    } else {
+                        alert('Error adding customer. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding customer. Please try again.');
+                });
+            });
+            
+            // Edit customer form submission
+            document.getElementById('edit-customer-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                data.accountNumber = document.getElementById('edit-account-number').value;
+                
+                fetch('customers', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data)
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        alert('Customer updated successfully!');
+                        this.reset();
+                        document.getElementById('edit-customer-form').style.display = 'none';
+                        loadCustomerData();
+                    } else {
+                        alert('Error updating customer. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error updating customer. Please try again.');
+                });
+            });
+            
+            // Load customer button
+            document.getElementById('load-customer-btn').addEventListener('click', function() {
+                const accountNumber = document.getElementById('edit-account-number').value;
+                
+                fetch(`customers?action=get&accountNumber=${accountNumber}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Customer not found');
+                    }
+                })
+                .then(customer => {
+                    document.getElementById('edit-name').value = customer.name;
+                    document.getElementById('edit-address').value = customer.address;
+                    document.getElementById('edit-telephone').value = customer.telephone;
+                    document.getElementById('edit-units-consumed').value = customer.unitsConsumed;
+                    document.getElementById('edit-customer-form').style.display = 'block';
+                })
+                .catch(error => {
+                    alert('Customer not found. Please check the account number.');
+                    console.error('Error:', error);
+                });
+            });
+            
+            // Search functionality
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('customer-search').value.toLowerCase();
+                filterCustomerTable(searchTerm);
+            });
+            
+            document.getElementById('customer-search').addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase();
+                filterCustomerTable(searchTerm);
+            });
+        });
+        
+        function loadCustomerData() {
+            fetch('customers')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#customer-table tbody');
+                    tableBody.innerHTML = '';
+                    
+                    if (data.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="5">No customers found</td></tr>';
+                        return;
+                    }
+                    
+                    data.forEach(customer => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${customer.accountNumber}</td>
+                            <td>${customer.name}</td>
+                            <td>${customer.address}</td>
+                            <td>${customer.telephone}</td>
+                            <td>${customer.unitsConsumed}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading customers:', error);
+                    document.querySelector('#customer-table tbody').innerHTML = 
+                        '<tr><td colspan="5">Error loading customer data</td></tr>';
+                });
+        }
+        
+        function filterCustomerTable(searchTerm) {
+            const tableRows = document.querySelectorAll('#customer-table tbody tr');
+            
+            tableRows.forEach(row => {
+                const accountNumber = row.cells[0].textContent.toLowerCase();
+                const name = row.cells[1].textContent.toLowerCase();
+                
+                if (accountNumber.includes(searchTerm) || name.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).style.display = 'block';
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

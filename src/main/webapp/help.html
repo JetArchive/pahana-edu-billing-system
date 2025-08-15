@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Pahana Edu Bookshop</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pahana Edu Bookshop</h1>
+            <div class="user-info">
+                <span id="username"></span>
+                <a href="auth" class="btn">Logout</a>
+            </div>
+        </header>
+        
+        <main>
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="customer.html">Customer Management</a></li>
+                    <li><a href="item.html">Item Management</a></li>
+                    <li><a href="bill.html">Billing System</a></li>
+                    <li><a href="help.html" class="active">Help</a></li>
+                </ul>
+            </nav>
+            
+            <section class="content">
+                <h2>Help and Support</h2>
+                
+                <div class="help-section">
+                    <h3>Getting Started</h3>
+                    <p>Welcome to the Pahana Edu Bookshop Management System. This system helps you manage customers, inventory, and billing efficiently.</p>
+                    
+                    <h4>System Requirements</h4>
+                    <ul>
+                        <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+                        <li>Internet connection for accessing the system</li>
+                        <li>Valid login credentials</li>
+                    </ul>
+                </div>
+                
+                <div class="help-section">
+                    <h3>User Guide</h3>
+                    
+                    <h4>1. Login</h4>
+                    <p>To access the system, you need to log in with your username and password. If you don't have an account, please contact the system administrator.</p>
+                    
+                    <h4>2. Dashboard</h4>
+                    <p>The dashboard provides an overview of your bookshop operations, including customer count, item count, and recent activity.</p>
+                    
+                    <h4>3. Customer Management</h4>
+                    <p>In this section, you can:</p>
+                    <ul>
+                        <li>Add new customers with their details</li>
+                        <li>View all customers in the system</li>
+                        <li>Edit existing customer information</li>
+                    </ul>
+                    
+                    <h4>4. Item Management</h4>
+                    <p>In this section, you can:</p>
+                    <ul>
+                        <li>Add new items to your inventory</li>
+                        <li>View all items in the system</li>
+                        <li>Edit existing item information</li>
+                        <li>Delete items from inventory</li>
+                    </ul>
+                    
+                    <h4>5. Billing System</h4>
+                    <p>In this section, you can:</p>
+                    <ul>
+                        <li>Generate bills for customers</li>
+                        <li>View all bills generated</li>
+                        <li>Print bills for customers</li>
+                    </ul>
+                </div>
+                
+                <div class="help-section">
+                    <h3>Frequently Asked Questions</h3>
+                    
+                    <div class="faq-item">
+                        <h4>How do I reset my password?</h4>
+                        <p>Contact the system administrator to reset your password.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>How do I add a new customer?</h4>
+                        <p>Go to the Customer Management section, click on the "Add Customer" tab, and fill in the required details.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>How do I generate a bill?</h4>
+                        <p>Go to the Billing System section, select a customer, choose an item, enter the units, and click "Generate Bill".</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4>Can I delete a customer?</h4>
+                        <p>Currently, the system does not support deleting customers. You can only edit their information.</p>
+                    </div>
+                </div>
+                
+                <div class="help-section">
+                    <h3>Contact Support</h3>
+                    <p>If you need further assistance, please contact our support team:</p>
+                    <ul>
+                        <li>Email: support@pahanaedu.com</li>
+                        <li>Phone: +94 11 200 0000</li>
+                        <li>Address: 123, Colombo, Sri Lanka</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Pahana Edu Bookshop. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

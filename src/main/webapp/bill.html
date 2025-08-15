@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing System - Pahana Edu Bookshop</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pahana Edu Bookshop</h1>
+            <div class="user-info">
+                <span id="username"></span>
+                <a href="auth" class="btn">Logout</a>
+            </div>
+        </header>
+        
+        <main>
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="customer.html">Customer Management</a></li>
+                    <li><a href="item.html">Item Management</a></li>
+                    <li><a href="bill.html" class="active">Billing System</a></li>
+                    <li><a href="help.html">Help</a></li>
+                </ul>
+            </nav>
+            
+            <section class="content">
+                <h2>Billing System</h2>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="showTab('generate-bill')">Generate Bill</button>
+                    <button class="tab-btn" onclick="showTab('view-bills')">View Bills</button>
+                </div>
+                
+                <div id="generate-bill" class="tab-content">
+                    <form id="bill-form">
+                        <div class="form-group">
+                            <label for="customer-account">Customer Account Number:</label>
+                            <input type="text" id="customer-account" name="accountNumber" required>
+                            <button type="button" id="load-customer-btn" class="btn">Load Customer</button>
+                        </div>
+                        
+                        <div id="customer-info" style="display: none;">
+                            <h3>Customer Information</h3>
+                            <p><strong>Name:</strong> <span id="customer-name"></span></p>
+                            <p><strong>Address:</strong> <span id="customer-address"></span></p>
+                            <p><strong>Telephone:</strong> <span id="customer-telephone"></span></p>
+                            <p><strong>Units Consumed:</strong> <span id="customer-units"></span></p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="item-select">Select Item:</label>
+                            <select id="item-select" name="itemId" required>
+                                <option value="">-- Select an Item --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="units">Units:</label>
+                            <input type="number" id="units" name="units" min="1" required>
+                        </div>
+                        
+                        <button type="submit" class="btn">Generate Bill</button>
+                    </form>
+                    
+                    <div id="bill-result" style="display: none;">
+                        <h3>Bill Details</h3>
+                        <div class="bill-details">
+                            <p><strong>Customer Name:</strong> <span id="bill-customer-name"></span></p>
+                            <p><strong>Account Number:</strong> <span id="bill-account-number"></span></p>
+                            <p><strong>Item:</strong> <span id="bill-item-name"></span></p>
+                            <p><strong>Units:</strong> <span id="bill-units"></span></p>
+                            <p><strong>Price Per Unit:</strong> <span id="bill-price-per-unit"></span></p>
+                            <p><strong>Total Amount:</strong> <span id="bill-total"></span></p>
+                        </div>
+                        
+                        <button id="print-bill-btn" class="btn">Print Bill</button>
+                    </div>
+                </div>
+                
+                <div id="view-bills" class="tab-content" style="display: none;">
+                    <div class="search-container">
+                        <input type="text" id="bill-search" placeholder="Search by account number">
+                        <button id="bill-search-btn" class="btn">Search</button>
+                    </div>
+                    
+                    <table id="bill-table">
+                        <thead>
+                            <tr>
+                                <th>Bill ID</th>
+                                <th>Account Number</th>
+                                <th>Customer Name</th>
+                                <th>Item</th>
+                                <th>Units</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7">Loading bill data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Pahana Edu Bookshop. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadItems();
+            loadBillData();
+            
+            // Load customer button
+            document.getElementById('load-customer-btn').addEventListener('click', function() {
+                const accountNumber = document.getElementById('customer-account').value;
+                
+                fetch(`customers?action=get&accountNumber=${accountNumber}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Customer not found');
+                    }
+                })
+                .then(customer => {
+                    document.getElementById('customer-name').textContent = customer.name;
+                    document.getElementById('customer-address').textContent = customer.address;
+                    document.getElementById('customer-telephone').textContent = customer.telephone;
+                    document.getElementById('customer-units').textContent = customer.unitsConsumed;
+                    document.getElementById('customer-info').style.display = 'block';
+                })
+                .catch(error => {
+                    alert('Customer not found. Please check the account number.');
+                    console.error('Error:', error);
+                });
+            });
+            
+            // Bill form submission
+            document.getElementById('bill-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                fetch('bills', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Error generating bill');
+                    }
+                })
+                .then(bill => {
+                    document.getElementById('bill-customer-name').textContent = bill.customerName;
+                    document.getElementById('bill-account-number').textContent = bill.accountNumber;
+                    document.getElementById('bill-item-name').textContent = bill.itemName;
+                    document.getElementById('bill-units').textContent = bill.units;
+                    document.getElementById('bill-price-per-unit').textContent = bill.pricePerUnit;
+                    document.getElementById('bill-total').textContent = bill.total;
+                    document.getElementById('bill-result').style.display = 'block';
+                    
+                    // Reset form
+                    this.reset();
+                    document.getElementById('customer-info').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error generating bill. Please try again.');
+                });
+            });
+            
+            // Print bill button
+            document.getElementById('print-bill-btn').addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Search functionality
+            document.getElementById('bill-search-btn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('bill-search').value.toLowerCase();
+                filterBillTable(searchTerm);
+            });
+            
+            document.getElementById('bill-search').addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase();
+                filterBillTable(searchTerm);
+            });
+        });
+        
+        function loadItems() {
+            fetch('items')
+                .then(response => response.json())
+                .then(data => {
+                    const itemSelect = document.getElementById('item-select');
+                    itemSelect.innerHTML = '<option value="">-- Select an Item --</option>';
+                    
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = `${item.name} - ${item.pricePerUnit}`;
+                        itemSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading items:', error);
+                });
+        }
+        
+        function loadBillData() {
+            // Simulated bill data
+            const billData = [
+                { id: 'B001', accountNumber: 'ACC001', customerName: 'John Doe', item: 'Java Programming', units: 2, total: 5600.00, date: '2023-10-15' },
+                { id: 'B002', accountNumber: 'ACC002', customerName: 'Jane Smith', item: 'Web Design', units: 1, total: 3200.00, date: '2023-10-16' },
+                { id: 'B003', accountNumber: 'ACC003', customerName: 'Robert Johnson', item: 'Database Systems', units: 3, total: 8400.00, date: '2023-10-17' }
+            ];
+            
+            const tableBody = document.querySelector('#bill-table tbody');
+            tableBody.innerHTML = '';
+            
+            if (billData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7">No bills found</td></tr>';
+                return;
+            }
+            
+            billData.forEach(bill => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${bill.id}</td>
+                    <td>${bill.accountNumber}</td>
+                    <td>${bill.customerName}</td>
+                    <td>${bill.item}</td>
+                    <td>${bill.units}</td>
+                    <td>${bill.total.toFixed(2)}</td>
+                    <td>${bill.date}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function filterBillTable(searchTerm) {
+            const tableRows = document.querySelectorAll('#bill-table tbody tr');
+            
+            tableRows.forEach(row => {
+                const accountNumber = row.cells[1].textContent.toLowerCase();
+                const customerName = row.cells[2].textContent.toLowerCase();
+                
+                if (accountNumber.includes(searchTerm) || customerName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).style.display = 'block';
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
