@@ -1,4 +1,4 @@
-# 📚 PahanaEduTS – Bookshop Management System (ICBT SEM 05 Assignment) V.01
+# 📚 PahanaEduTS – Bookshop Management System (ICBT SEM 05 Assignment) V.02
 
 A **comprehensive web-based bookshop management system** built using **Java Servlets, JSP, and MySQL**. This system helps **Pahana Edu Bookshop in Colombo** efficiently manage operations including **customer accounts, inventory, billing, and administration**.  
 
@@ -22,7 +22,7 @@ A **comprehensive web-based bookshop management system** built using **Java Serv
 - Delete items from inventory  
 - View all items in a searchable table  
 
-### 4. 🧾 Billing System
+### 4. 🧾 Billing System (added on V.02)
 - Generate bills based on customer purchases  
 - Calculate total amounts based on units consumed and item prices  
 - Print bills for customers  
