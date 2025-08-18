@@ -23,6 +23,7 @@
     <a href="dashboard.jsp">Dashboard</a>
     <a href="customers.jsp">Customers</a>
     <a href="items.jsp">Items</a>
+    <a href="bill.jsp">Bills</a>
     <a href="help.jsp">Help</a>
     <a href="admins.jsp">Admins</a>
     <a href="logout">Logout</a>
@@ -57,7 +58,8 @@
         <a class="btn" href="items.jsp">Back</a>
     </form>
 
-    <%@ include file="footer.jsp" %>
+
 </div>
+<footer>&copy; 2025 Pahana Edu Bookshop</footer>
 </body>
 </html>

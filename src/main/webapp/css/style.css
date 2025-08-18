@@ -166,3 +166,12 @@ footer {
     bottom: 0;
     width: 100%;
 }
+ footer { 
+ background:#1abc9c; 
+ color:white; 
+ text-align:center; 
+ padding:10px; 
+ position:fixed; 
+ bottom:0;
+ width:100%; 
+ }

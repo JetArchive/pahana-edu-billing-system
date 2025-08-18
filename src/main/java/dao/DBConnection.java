@@ -9,7 +9,8 @@ import java.sql.SQLException;
  * Change USER and PASS to suit your MySQL credentials.
  */
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/st20284491?useSSL=false&serverTimezone=UTC";
+    // Updated JDBC URL with allowPublicKeyRetrieval
+    private static final String URL = "jdbc:mysql://localhost:3306/st20284491?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
     private static final String USER = "root";
     private static final String PASS = "admin"; // change to your password
 
