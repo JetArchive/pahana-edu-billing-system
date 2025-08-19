@@ -63,7 +63,7 @@
                 <td class="actions">
                     <a class="small btn" href="customer?action=edit&accountNo=<%= c.getAccountNo() %>">Edit</a>
                     <a class="small btn" href="javascript:confirmDelete('customer','<%= c.getAccountNo() %>')">Delete</a>
-                    <a class="small btn" href="bill?accountNo=<%= c.getAccountNo() %>">Print Bill</a>
+                
                 </td>
             </tr>
         <% } %>

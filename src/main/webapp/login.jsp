@@ -47,5 +47,6 @@
         Use <strong>admin/admin123 (temp message)</strong>
     </div>
 </div>
+<footer>&copy; 2025 Pahana Edu Bookshop</footer>
 </body>
 </html>

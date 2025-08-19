@@ -40,7 +40,7 @@
 <body>
     <div class="container">
         <h1>Welcome to Pahana Edu</h1>
-        <p>Manage your bookstore efficiently with our billing system</p>
+        <p>Manage your bookstore efficiently</p>
         <a class="btn" href="login.jsp">Go to Login</a>
     </div>
 </body>
